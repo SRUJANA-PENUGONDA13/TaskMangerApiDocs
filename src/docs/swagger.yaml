@@ -10,7 +10,8 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-
+    
+host: https://dashboard.heroku.com/apps/srujana-task-manager-api-docs
 basePath: 
 
 schemes:
