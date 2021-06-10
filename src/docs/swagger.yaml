@@ -1,0 +1,525 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is Task Manger API to manage your tasks
+  version: 1.0.0
+  title: Task Manager
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: srujanapenugonda1318@outlook.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+basePath: 
+
+schemes:
+  - https
+  - http
+
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+tags:
+  - name: User
+    description: Everything about users
+  - name: Task
+    description: Manages task information
+  - name: Tag
+    description: Manages tag information
+  - name: Task Status
+    description: Manages status of different tasks of user
+    
+paths:
+  /users:
+    post:
+      tags:
+        - User
+      summary: Add a new user to Task Manager App
+      description: ''
+      operationId: addUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User object that needs to be added to Task Manager
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '400':
+          description: Bad Request
+        '200' :
+          description: Success
+    get:
+      tags:
+        - User
+      summary: 'Retrives all users of Task Manager App'
+      description: 'It retrives all users'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '404':
+          description: Not Found
+        '200' :
+          description: Success
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: Add a new user to Task Manager App
+      description: 'Login user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name : email
+          in: body
+          description: 'registered e-mail id of the user'
+          required: true
+          type: string
+        - name : password
+          in: body
+          description: 'registered password of the user'
+          required: true
+          type: string
+      responses:
+        '400':
+          description: Bad Request
+        '200' :
+          description: Success
+  /user/logout:
+    post:
+      tags:
+        - User
+      summary: Logout the user from current session
+      description: 'Logout user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+  /users/logoutAll:
+    post:
+      tags:
+        - User
+      summary: Logout the user from all active sessions
+      description: 'Logout user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+  /user:
+    delete:
+      tags:
+        - User
+      summary: Delete a user
+      description: 'Delete user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+  /users/tasks/status:
+    post:
+      tags:
+        - Task Status
+      summary: Add a task to a user
+      description: 'Add task of user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Task Status object to add tasks of a user to Task Status Collection
+          required: true
+          schema:
+            $ref: '#/definitions/Task Status'
+      responses:
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+    get:
+      tags:
+        - Task Status
+      summary: Retrieves all tasks of a user
+      description: Retrieves all tasks of a user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '200' :
+          description: Success
+        '404' :
+          description: Not Found
+  /users/tasks/status/date/{date}:
+    get:
+      tags:
+        - Task Status
+      summary: Retrieves all tasks of a user on specific date
+      description: 'Retrieves all tasks of a user on specific date'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: date
+          in: path
+          description: Date
+          required: true
+          type: string
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '200' :
+          description: Success
+        '404' :
+          description: Not Found
+  /users/tasks/status/tag/{tagName}:
+    get:
+      tags:
+        - Task Status
+      summary: Retrieves all tasks of a user associated with a specific tag
+      description: Retrieves all tasks of a user associated with a specific tag
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: tagName
+          in: path
+          description: Tag
+          required: true
+          type: string
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string
+      responses:
+        '200' :
+          description: Success
+        '404' :
+          description: Not Found
+  /users/tasks/{taskName}:
+    delete:
+      tags:
+        - Task Status
+      summary: delete a task  
+      description: 'Delete a specific task of the user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: taskName
+          in: path
+          description: Task Name
+          required: true
+          type: string
+        - name: auth
+          in: header
+          description: JWT authorization header
+          required: true
+          type: string      
+      responses:
+        '404':
+          description: Not Found
+        '401':
+          description: Unauthorized
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+  /tasks:
+    post:
+      tags:
+        - Task
+      summary: Add a task 
+      description: 'Add task'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Task object to add tasks to Task Collection
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+    get:
+        tags:
+          - Task
+        summary: 'Retrives all tasks of Task Manger API'
+        description: 'It retrives all tasks'
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        responses:
+          '404':
+            description: Not Found
+          '200' :
+            description: Success
+  /tasks/{tagName}:
+    get:
+      tags:
+        - Task
+      summary: Retrieves all tasks associated with a tag
+      description: 'Retrieves all tasks associated with a tag'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: tagName
+          in: path
+          description: TagName
+          required: true
+          type: string
+      responses:
+        '200' :
+          description: Success
+        '404' :
+          description: Not Found
+  /tag:
+    post:
+      tags:
+        - Tag
+      summary: Add Tag
+      description: 'Add Tag'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Tag object to add tags to Tags Collection
+          required: true
+          schema:
+            $ref: '#/definitions/Tag'
+      responses:
+        '400':
+          description: Bad Request
+        '200' :
+          description: Success
+        '500' :
+          description: Internal Server Error
+  /tags:
+    get:
+        tags:
+          - Tag
+        summary: 'Retrives all tags of Task Manger API'
+        description: 'It retrives all tags'
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        responses:
+          '404':
+            description: Not Found
+          '200' :
+            description: Success
+  /tag/{tagName}:
+    delete:
+      tags:
+        - Tag
+      summary: Delete a tag
+      description: 'Delete user'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: tagName
+          in: path
+          description: TagName to delete a tag
+          required: true
+          type: string
+      responses:
+        '200' :
+          description: Success
+        '404' :
+          description: Not Found
+# definitions + parameters + securityDefinitions
+definitions:
+  # Collection of users
+  User:
+    required:
+      - name
+      - password
+      - email
+      - contact
+      - tokens
+    properties:
+      name:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+       
+      email:
+        type: string
+      
+      contact:
+        type: string
+      
+      tokens:
+        type: array
+    example:
+      {
+        name: 'Srujana Penugonda',
+        password: 'welcome@123',
+        emil : 'srujanapenugonda13@gmail.com',
+        contact: '9768683878',
+        tokens:[
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGJjYjY1OWZkNjk3MDAwMTUwYmMyY2UiLCJpYXQiOjE2MjMzMzAxNzB9.Wg1k0iw_P51dYOnDHXfQmtzaEPAlYu3YOLCDctTViPg'
+        ]
+      }
+  Task Status:
+    required:
+      - tagName
+      - taskName
+      - taskDescription
+      - taskStatus
+    properties:
+    # Name of the tag
+      tagName:
+        type: String
+    # Name of the tag
+      taskName:
+        type: string   
+    # Task Description
+      taskDescription:
+        type: string
+    # Task Status 
+      taskStatus:
+        type: string
+    example:
+      {
+        tagName: 'Office',
+        taskName : 'Learning',
+        taskDescription : 'Completing Node.js course',
+        taskStatus : 'Inprogress',
+        
+      }
+  Task:
+    required:
+      - tagName
+      - taskName
+    properties:
+    # Name of the tag
+      tagName:
+        type: String
+    # Name of the tag
+      taskName:
+        type: string   
+    example:
+      {
+        tagName: 'Office',
+        taskName : 'Learning'
+      }
+  Tag:
+    required:
+      - tagName
+    properties:
+    # Name of the tag
+      tagName:
+        type: String
+    example:
+      {
+        tagName: 'Office'
+      }
+# Security Definitions
+securityDefinitions:
+  KeySecurity:
+    type: apiKey
+    in: query
+    name: api_key
